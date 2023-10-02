@@ -1,4 +1,4 @@
-import { GithubAuthProvider, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, FacebookAuthProvider, signOut } from "firebase/auth";
+import { GithubAuthProvider, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, FacebookAuthProvider, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import auth from '../../firebase/firebase'
 import {  useNavigate } from "react-router-dom";
@@ -25,11 +25,20 @@ const Authprovider = ({children}) =>{
         return signOut(auth)
      }
 
+    // create user with email
+    const createUserWithEmail = (email, password) =>{
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
+
+    // Login with email
+    const logInwithEmail = (email, password) => { 
+        return signInWithEmailAndPassword(auth, email , password)
+     }
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser =>{
                 setUser(currentUser);
                 setLoading(false)
-
         })
         return () => unsubscribe();
     },[])
@@ -43,6 +52,8 @@ const Authprovider = ({children}) =>{
         github,
         facebook,
         logOut,
+        createUserWithEmail,
+        logInwithEmail,
 
     }
 
